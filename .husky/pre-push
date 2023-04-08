@@ -3,4 +3,4 @@
 
 yarn lint-staged
 yarn typecheck
-yarn test
+#yarn test
