@@ -13,6 +13,7 @@ export default defineConfig({
     },
   },
   server: {
+    host: true,
     proxy: {
       '/eadrax-coas': {
         target: 'https://myprofile.bmw.com.cn',
