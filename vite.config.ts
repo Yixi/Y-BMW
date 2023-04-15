@@ -12,12 +12,8 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      '/eadrax-coas': {
-        target: 'https://myprofile.bmw.com.cn',
-        changeOrigin: true,
-      },
-      '/bmwKey.php': {
-        target: 'https://m.qqtlr.com',
+      '/api': {
+        target: 'http://bmw.yixi.pro',
         changeOrigin: true,
       },
     },

@@ -1,0 +1,42 @@
+@import "src/styles/variable";
+
+.titan {
+  height: 56px;
+  background: @primary;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 18px;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.navs {
+  display: flex;
+  margin-left: 30px;
+}
+
+.nav {
+  color: #fff;
+  height: 56px;
+  display: block;
+  line-height: 56px;
+  padding: 0 16px;
+  margin: 0 10px;
+
+  &:hover {
+    background: rgba(255,255,255,.1);
+    color: #fff;
+  }
+
+  &.active {
+    background: rgba(255,255,255,.3);
+  }
+}
