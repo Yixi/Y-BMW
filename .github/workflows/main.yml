@@ -51,4 +51,4 @@ jobs:
           script: |
             cd $HOME
             docker rm -f bmw-frontend || true
-            docker container run -d --name bmw-frontend --restart=always -p 3000:3000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+            docker container run -d --name bmw-frontend --restart=always -p 8800:80 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
