@@ -2,6 +2,8 @@ import React from 'react'
 import styles from './index.module.less'
 import { NavLink } from 'react-router-dom'
 import cls from 'classnames'
+import { Button } from 'antd'
+import { GithubOutlined } from '@ant-design/icons'
 
 const Titan: React.FC = () => {
   return (
@@ -16,6 +18,16 @@ const Titan: React.FC = () => {
         >
           首页
         </NavLink>
+      </div>
+      <div className={styles.actions}>
+        <span
+          className={styles.git}
+          onClick={() => {
+            window.open('https://github.com/Yixi/Y-BMW')
+          }}
+        >
+          <GithubOutlined />
+        </span>
       </div>
     </div>
   )

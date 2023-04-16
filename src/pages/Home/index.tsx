@@ -77,6 +77,66 @@ const HomePage: React.FC = () => {
     return `86${phone}`
   }, [phone])
 
+  const onGetCaptcha = () => {
+    getCaptcha({ data: { mobile } })
+      .then(() => {
+        message.success('获取图形验证码成功')
+      })
+      .catch(() => {
+        message.error('获取图形验证码失败')
+      })
+  }
+
+  const onPwdLogin = async () => {
+    setPwdLoginLoading(true)
+    try {
+      const [nonceRes, pubKeyRes] = await Promise.all([
+        getLoginNonce({ data: { mobile } }),
+        getPubKey(),
+      ])
+
+      const encryptPwd = await encodePwd(pubKeyRes?.data?.data?.value, password)
+
+      await loginByPwd({
+        headers: {
+          'x-login-nonce': nonceRes?.data?.nonce,
+        },
+        data: {
+          mobile,
+          password: encryptPwd,
+          verifyId: captchaData.data.verifyId,
+          deviceId: DEVICE_ID,
+        },
+      })
+
+      message.success('登录成功')
+    } catch (err) {
+      message.error(err?.response?.data?.description || '登录失败')
+    }
+    setPwdLoginLoading(false)
+  }
+  const onSmsLogin = async () => {
+    setSmsLoginLoading(true)
+    try {
+      const nonceRes = await getLoginNonce({ data: { mobile } })
+      await loginBySMS({
+        headers: {
+          'x-login-nonce': nonceRes?.data?.nonce,
+        },
+        data: {
+          mobile,
+          otpId: smsResult?.data?.otpID,
+          otpMsg: smsCode,
+          deviceId: DEVICE_ID,
+        },
+      })
+
+      message.success('登录成功')
+    } catch (err) {
+      message.error(err?.response?.data?.description || '登录失败')
+    }
+    setSmsLoginLoading(false)
+  }
   return (
     <Space direction="vertical" size={32}>
       <Space direction="vertical">
@@ -88,20 +148,13 @@ const HomePage: React.FC = () => {
             prefix="86"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            onPressEnter={onGetCaptcha}
           />
           <Button
             type="primary"
             disabled={captchaData?.code === 200}
             loading={captchaLoading}
-            onClick={() => {
-              getCaptcha({ data: { mobile } })
-                .then(() => {
-                  message.success('获取图形验证码成功')
-                })
-                .catch(() => {
-                  message.error('获取图形验证码失败')
-                })
-            }}
+            onClick={onGetCaptcha}
           >
             获取图形验证码
           </Button>
@@ -145,44 +198,13 @@ const HomePage: React.FC = () => {
                   placeholder="输入密码"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onPressEnter={onPwdLogin}
                 />
                 <Button
                   loading={pwdLoginLoading}
                   disabled={loginResult?.code === 200 || !password}
                   type="primary"
-                  onClick={async () => {
-                    setPwdLoginLoading(true)
-                    try {
-                      const [nonceRes, pubKeyRes] = await Promise.all([
-                        getLoginNonce({ data: { mobile } }),
-                        getPubKey(),
-                      ])
-
-                      const encryptPwd = await encodePwd(
-                        pubKeyRes?.data?.data?.value,
-                        password,
-                      )
-
-                      await loginByPwd({
-                        headers: {
-                          'x-login-nonce': nonceRes?.data?.nonce,
-                        },
-                        data: {
-                          mobile,
-                          password: encryptPwd,
-                          verifyId: captchaData.data.verifyId,
-                          deviceId: DEVICE_ID,
-                        },
-                      })
-
-                      message.success('登录成功')
-                    } catch (err) {
-                      message.error(
-                        err?.response?.data?.description || '登录失败',
-                      )
-                    }
-                    setPwdLoginLoading(false)
-                  }}
+                  onClick={onPwdLogin}
                 >
                   登录
                 </Button>
@@ -220,6 +242,7 @@ const HomePage: React.FC = () => {
                   placeholder="输入短信验证码"
                   value={smsCode}
                   onChange={(e) => setSmsCode(e.target.value)}
+                  onPressEnter={onSmsLogin}
                 />
                 <Button
                   type="primary"
@@ -229,30 +252,7 @@ const HomePage: React.FC = () => {
                     smsResult?.code !== 200 ||
                     !smsCode
                   }
-                  onClick={async () => {
-                    setSmsLoginLoading(true)
-                    try {
-                      const nonceRes = await getLoginNonce({ data: { mobile } })
-                      await loginBySMS({
-                        headers: {
-                          'x-login-nonce': nonceRes?.data?.nonce,
-                        },
-                        data: {
-                          mobile,
-                          otpId: smsResult?.data?.otpID,
-                          otpMsg: smsCode,
-                          deviceId: DEVICE_ID,
-                        },
-                      })
-
-                      message.success('登录成功')
-                    } catch (err) {
-                      message.error(
-                        err?.response?.data?.description || '登录失败',
-                      )
-                    }
-                    setSmsLoginLoading(false)
-                  }}
+                  onClick={onSmsLogin}
                 >
                   登录
                 </Button>
