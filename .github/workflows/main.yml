@@ -39,6 +39,9 @@ jobs:
           tags: ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
   deploy:
     needs: build
+    environment:
+      name: deploy-prod
+      url: http://bmw.yixi.pro/
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands
