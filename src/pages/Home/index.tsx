@@ -223,6 +223,7 @@ const HomePage: React.FC = () => {
                 />
                 <Button
                   type="primary"
+                  loading={smsLoginLoading}
                   disabled={
                     loginResult?.code === 200 ||
                     smsResult?.code !== 200 ||
@@ -250,6 +251,7 @@ const HomePage: React.FC = () => {
                         err?.response?.data?.description || '登录失败',
                       )
                     }
+                    setSmsLoginLoading(false)
                   }}
                 >
                   登录

@@ -23,5 +23,32 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Build docker Image
-        run: docker build -t vite-react-typescript-starter:${{ github.sha }} .
+      - name: Login to Docker
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PWD }}
+      - name: Build and push Docker image
+        id: docker_push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.HOST }}
+          port: 22
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd $HOME
+            docker rm -f bmw-frontend || true
+            docker container run -d --name bmw-frontend --restart=always -p 3000:3000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
