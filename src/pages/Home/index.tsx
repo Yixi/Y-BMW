@@ -3,10 +3,13 @@ import { App, Button, Input, Space } from 'antd'
 import useRequest from '@root/api/api'
 import Captcha from '@root/pages/Home/Captcha'
 import styles from './index.module.less'
-import { DEVICE_ID } from '@root/utils/constants'
 import { encodePwd } from '@root/utils/encodeBMWPwd'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { set } from 'husky'
+import md5 from 'md5'
+import { LIST_CHAR } from '@root/utils/constants'
+import { uuidv4 } from '@root/utils/help'
+
+let BMW_HEADERS_X = {}
 
 const HomePage: React.FC = () => {
   const { message } = App.useApp()
@@ -18,7 +21,7 @@ const HomePage: React.FC = () => {
   const [{ data: captchaData, loading: captchaLoading }, getCaptcha] =
     useRequest(
       {
-        url: '/bmw/eadrax-coas/v2/cop/slider-captcha',
+        url: '/bmw/eadrax-coas/v2/cop/create-captcha',
         method: 'POST',
       },
       { manual: true },
@@ -29,7 +32,7 @@ const HomePage: React.FC = () => {
     checkCaptcha,
   ] = useRequest(
     {
-      url: '/bmw/eadrax-coas/v1/cop/check-captcha',
+      url: '/bmw/eadrax-coas/v2/cop/verify-captcha',
       method: 'POST',
     },
     { manual: true },
@@ -77,14 +80,33 @@ const HomePage: React.FC = () => {
     return `86${phone}`
   }, [phone])
 
-  const onGetCaptcha = () => {
-    getCaptcha({ data: { mobile } })
-      .then(() => {
+  const onGetCaptcha = async () => {
+    for (let i = 0; i < LIST_CHAR.length; i++) {
+      const uuid = uuidv4()
+      BMW_HEADERS_X = {
+        ...BMW_HEADERS_X,
+        'x-correlation-id': uuid,
+        'bmw-correlation-id': uuid,
+        x: `${LIST_CHAR[i]}${md5(uuidv4())}${md5(uuidv4())}`.substr(0, 64),
+      }
+
+      try {
+        await getCaptcha({
+          data: { mobile, brand: 'BMW' },
+          headers: {
+            ...BMW_HEADERS_X,
+          },
+        })
         message.success('获取图形验证码成功')
-      })
-      .catch(() => {
-        message.error('获取图形验证码失败')
-      })
+        break
+      } catch (err) {
+        message.error({
+          content: '获取图形验证码失败, 重试...',
+          key: uuid,
+        })
+        continue
+      }
+    }
   }
 
   const onPwdLogin = async () => {
@@ -100,12 +122,13 @@ const HomePage: React.FC = () => {
       await loginByPwd({
         headers: {
           'x-login-nonce': nonceRes?.data?.nonce,
+          ...BMW_HEADERS_X,
         },
         data: {
           mobile,
           password: encryptPwd,
           verifyId: captchaData.data.verifyId,
-          deviceId: DEVICE_ID,
+          deviceId: md5(mobile),
         },
       })
 
@@ -122,12 +145,13 @@ const HomePage: React.FC = () => {
       await loginBySMS({
         headers: {
           'x-login-nonce': nonceRes?.data?.nonce,
+          ...BMW_HEADERS_X,
         },
         data: {
           mobile,
           otpId: smsResult?.data?.otpID,
           otpMsg: smsCode,
-          deviceId: DEVICE_ID,
+          deviceId: md5(mobile),
         },
       })
 
@@ -174,6 +198,10 @@ const HomePage: React.FC = () => {
                 data: {
                   position,
                   verifyId: captchaData.data.verifyId,
+                  mobile,
+                },
+                headers: {
+                  ...BMW_HEADERS_X,
                 },
               })
                 .then(() => {
@@ -224,8 +252,11 @@ const HomePage: React.FC = () => {
                     sendSMSCode({
                       data: {
                         mobile,
-                        deviceId: DEVICE_ID,
+                        deviceId: md5(mobile),
                         verifyId: captchaData.data.verifyId,
+                      },
+                      headers: {
+                        ...BMW_HEADERS_X,
                       },
                     })
                       .then(() => {

@@ -13,7 +13,8 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://bmw.yixi.pro',
+        target: 'https://bmw.yixi.pro',
+        // target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

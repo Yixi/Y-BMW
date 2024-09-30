@@ -5,8 +5,10 @@ const useRequest = makeUseAxios({
   axios: axios.create({
     baseURL: '/api',
     headers: {
-      'x-user-agent': 'android(rq3a.211001.001 test-keys);bmw;3.6.1(23634);cn',
-      'accept-language': 'zh-CN',
+      'Content-Type': 'application/json; charset=utf-8',
+      'x-user-agent': 'android(29);bmw;4.9.1(36994);cn',
+      'Accept-Language': 'zh-CN',
+      'User-Agent': 'Dart/3.3 (dart:io)',
     },
   }),
 })
