@@ -102,7 +102,7 @@ const HomePage: React.FC = () => {
       } catch (err) {
         message.error({
           content: '获取图形验证码失败, 重试...',
-          key: uuid,
+          key: 'capture_error',
         })
         continue
       }
