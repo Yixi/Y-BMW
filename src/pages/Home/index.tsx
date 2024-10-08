@@ -18,6 +18,8 @@ const HomePage: React.FC = () => {
   const [pwdLoginLoading, setPwdLoginLoading] = React.useState<boolean>(false)
   const [smsCode, setSmsCode] = React.useState<string>('')
   const [smsLoginLoading, setSmsLoginLoading] = React.useState<boolean>(false)
+  const [refreshTokenLoading, setRefreshTokenLoading] =
+    React.useState<boolean>(false)
   const [{ data: captchaData, loading: captchaLoading }, getCaptcha] =
     useRequest(
       {
@@ -69,6 +71,11 @@ const HomePage: React.FC = () => {
 
   const [{ data: pwdLoginResult }, loginByPwd] = useRequest(
     { url: 'bmw/eadrax-coas/v2/login/pwd', method: 'POST' },
+    { manual: true },
+  )
+
+  const [{ data: refreshTokenResult }, refreshToken] = useRequest(
+    { url: '/bmw/eadrax-coas/v2/oauth/token', method: 'POST' },
     { manual: true },
   )
 
@@ -161,6 +168,31 @@ const HomePage: React.FC = () => {
     }
     setSmsLoginLoading(false)
   }
+
+  const onRefreshToken = async () => {
+    setRefreshTokenLoading(true)
+
+    try {
+      const nonceRes = await getLoginNonce({
+        data: { mobile: loginResult?.data?.gcid },
+      })
+      await refreshToken({
+        headers: {
+          'x-login-nonce': nonceRes?.data?.nonce,
+          ...BMW_HEADERS_X,
+          'content-type': 'text/plain',
+        },
+        data: `grant_type=refresh_token&refresh_token=${loginResult?.data?.refresh_token}`,
+      })
+      message.success('刷新 Access Token 成功')
+    } catch (err) {
+      message.error(
+        err?.response?.data?.description || '刷新 Access Token 失败',
+      )
+    }
+    setRefreshTokenLoading(false)
+  }
+
   return (
     <Space direction="vertical" size={32}>
       <Space direction="vertical">
@@ -313,8 +345,22 @@ const HomePage: React.FC = () => {
             >
               <Button type="primary">复制 Access Token</Button>
             </CopyToClipboard>
+
+            <Button
+              type="primary"
+              onClick={onRefreshToken}
+              loading={refreshTokenLoading}
+            >
+              刷新 Access Token
+            </Button>
           </Space>
         </Space>
+      )}
+
+      {refreshTokenResult && (
+        <pre className={styles.response}>
+          {JSON.stringify(refreshTokenResult, null, 2)}
+        </pre>
       )}
     </Space>
   )

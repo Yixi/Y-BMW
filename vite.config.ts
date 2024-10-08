@@ -18,6 +18,6 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-    port: 8880,
+    port: 8808,
   },
 })
