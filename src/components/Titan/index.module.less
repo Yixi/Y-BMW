@@ -1,51 +1,78 @@
 @import "src/styles/variable";
 
 .titan {
-  height: 56px;
-  background: @primary;
+  height: 64px;
+  background: @gradient-header;
   display: flex;
   align-items: center;
   padding: 0 40px;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: @shadow-md;
 }
 
 .logo {
-  font-size: 18px;
+  font-size: 20px;
   color: #fff;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .navs {
   display: flex;
-  margin-left: 30px;
+  margin-left: 40px;
   flex: 1;
+  gap: 8px;
 }
 
 .nav {
-  color: #fff;
-  height: 56px;
-  display: block;
-  line-height: 56px;
-  padding: 0 16px;
-  margin: 0 10px;
+  color: rgba(255, 255, 255, 0.85);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
 
   &:hover {
-    background: rgba(255,255,255,.1);
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
+    transform: translateY(-1px);
   }
 
   &.active {
-    background: rgba(255,255,255,.3);
+    background: rgba(245, 110, 3, 0.9);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(245, 110, 3, 0.4);
   }
 }
 
 .actions {
+  display: flex;
+  align-items: center;
+  
   .git {
-    color: #fff;
-    font-size: 24px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 26px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.1);
+    }
   }
 }

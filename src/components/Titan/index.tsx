@@ -2,13 +2,17 @@ import React from 'react'
 import styles from './index.module.less'
 import { NavLink } from 'react-router-dom'
 import cls from 'classnames'
-import { Button } from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
 
 const Titan: React.FC = () => {
   return (
     <div className={styles.titan}>
-      <div className={styles.logo}>Y BMW Tools</div>
+      <div className={styles.logo}>
+        <span role="img" aria-label="car">
+          🚗
+        </span>
+        Y BMW Tools
+      </div>
       <div className={styles.navs}>
         <NavLink
           to="/"

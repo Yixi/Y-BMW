@@ -19,7 +19,7 @@ const Captcha: React.FC<ICaptchaProps> = ({
   const [position, setPosition] = useState(0)
 
   return (
-    <Space direction="vertical" style={{ width: '413px' }}>
+    <Space direction="vertical" style={{ width: '413px' }} size={16}>
       <div className={styles.capture}>
         <div
           className={styles['capture-bg']}
@@ -37,12 +37,15 @@ const Captcha: React.FC<ICaptchaProps> = ({
         step={0.01}
         onChange={setPosition}
         value={position}
+        tooltip={{ formatter: (value) => `${Math.round(value * 100)}%` }}
       />
       <Button
         disabled={btnDisabled}
         type="primary"
         loading={checking}
         onClick={() => onSuccess(position)}
+        size="large"
+        style={{ borderRadius: '8px', width: '100%' }}
       >
         验证图形验证码
       </Button>

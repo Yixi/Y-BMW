@@ -15,6 +15,17 @@ root.render(
       token: {
         colorPrimary: '#f56e03',
         colorLink: '#f56e03',
+        borderRadius: 8,
+      },
+      components: {
+        Button: {
+          borderRadius: 8,
+          controlHeight: 40,
+        },
+        Input: {
+          borderRadius: 8,
+          controlHeight: 40,
+        },
       },
     }}
     locale={zhCN}
