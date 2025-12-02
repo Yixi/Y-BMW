@@ -1,5 +1,72 @@
+@import "src/styles/variable";
+
+.pageContainer {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  background: @card-bg;
+  border-radius: @border-radius;
+  padding: 28px;
+  box-shadow: @shadow-sm;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: @shadow-md;
+  }
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stepNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: @gradient-primary;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(245, 110, 3, 0.3);
+}
+
+.stepTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: @text-primary;
+}
+
+.stepCompleted {
+  .stepNumber {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+}
+
 .capture {
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+
   .capture-bg {
     position: relative;
     left: 0;
@@ -7,6 +74,7 @@
     width: 100%;
     height: 252px;
     background-size: contain;
+    border-radius: 8px;
 
     img {
       position: absolute;
@@ -16,16 +84,61 @@
   }
 }
 
-
 .diver {
-  width: 1px;
+  width: 2px;
   height: 100px;
-  background: rgba(5, 5, 5, 0.06);
+  background: linear-gradient(180deg, transparent 0%, rgba(245, 110, 3, 0.3) 50%, transparent 100%);
+  border-radius: 1px;
 }
 
 .response {
-  font-size: 11px;
+  font-size: 12px;
   word-break: break-all;
   max-width: calc(100vw - 100px);
   overflow: auto;
+  background: #1e1e3f;
+  color: #a9b1d6;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  line-height: 1.6;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.loginSection {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.loginCard {
+  background: linear-gradient(135deg, rgba(248, 249, 252, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  min-width: 280px;
+}
+
+.loginCardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: @text-primary;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  &::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: @gradient-primary;
+    border-radius: 2px;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
