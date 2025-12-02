@@ -293,6 +293,7 @@ const HomePage: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     onPressEnter={onPwdLogin}
                     type="password"
+                    autoComplete="current-password"
                     size="large"
                     style={{ borderRadius: '8px 0 0 8px' }}
                   />
@@ -309,7 +310,7 @@ const HomePage: React.FC = () => {
                 </Space.Compact>
               </div>
 
-              <div className={styles.diver} />
+              <div className={styles.divider} />
 
               {/* SMS Login */}
               <div className={styles.loginCard}>

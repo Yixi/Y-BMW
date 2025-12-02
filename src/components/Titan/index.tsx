@@ -7,7 +7,12 @@ import { GithubOutlined } from '@ant-design/icons'
 const Titan: React.FC = () => {
   return (
     <div className={styles.titan}>
-      <div className={styles.logo}>Y BMW Tools</div>
+      <div className={styles.logo}>
+        <span role="img" aria-label="car">
+          🚗
+        </span>
+        Y BMW Tools
+      </div>
       <div className={styles.navs}>
         <NavLink
           to="/"
