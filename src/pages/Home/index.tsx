@@ -108,6 +108,7 @@ const HomePage: React.FC = () => {
         message.success('获取图形验证码成功')
         break
       } catch (err) {
+        console.error(err)
         message.error({
           content: '获取图形验证码失败, 重试...',
           key: 'capture_error',

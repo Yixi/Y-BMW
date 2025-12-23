@@ -13,12 +13,12 @@
 
 #### 安装依赖
 
-`yarn install`
+`pnpm install`
 
 ### 启动本地服务
 
-`yarn dev`
+`pnpm dev`
 
 #### 编译打包
 
-`yarn build`
+`pnpm build`
