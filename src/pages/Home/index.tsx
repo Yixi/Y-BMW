@@ -197,7 +197,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <Space direction="vertical" size={24} style={{ width: '100%' }}>
+      <Space direction="vertical" size={32} style={{ width: '100%' }}>
         {/* Step 1: Get Captcha */}
         <div
           className={cls(styles.card, {

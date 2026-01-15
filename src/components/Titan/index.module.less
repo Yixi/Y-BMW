@@ -1,78 +1,119 @@
 @import "src/styles/variable";
 
 .titan {
-  height: 64px;
-  background: @gradient-header;
+  height: 72px;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   padding: 0 40px;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: @shadow-md;
+  transition: all 0.3s ease;
 }
 
 .logo {
-  font-size: 20px;
+  font-size: 22px;
   color: #fff;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  text-transform: uppercase;
+  
+  span[role="img"] {
+    font-size: 24px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    animation: float 3s ease-in-out infinite;
+  }
 }
 
 .navs {
   display: flex;
-  margin-left: 40px;
+  margin-left: 60px;
   flex: 1;
-  gap: 8px;
+  gap: 12px;
 }
 
 .nav {
-  color: rgba(255, 255, 255, 0.85);
+  color: @text-tertiary;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
-  border-radius: 8px;
+  padding: 0 24px;
+  border-radius: 20px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.3s @ease-smooth;
   text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
     color: #fff;
-    transform: translateY(-1px);
+    &::before { opacity: 1; }
   }
 
   &.active {
-    background: rgba(245, 110, 3, 0.9);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(245, 110, 3, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 20%;
+      width: 60%;
+      height: 2px;
+      background: @gradient-primary;
+      box-shadow: 0 0 10px @primary;
+    }
   }
 }
 
 .actions {
   display: flex;
   align-items: center;
-  
+
   .git {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 26px;
+    color: @text-secondary;
+    font-size: 24px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 8px;
+    transition: all 0.3s @ease-smooth;
+    padding: 10px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+
     &:hover {
       color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: rotate(10deg);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
     }
   }
 }

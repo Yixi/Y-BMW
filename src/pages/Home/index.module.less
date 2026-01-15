@@ -1,81 +1,108 @@
 @import "src/styles/variable";
 
 .pageContainer {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .card {
   background: @card-bg;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid @card-border;
   border-radius: @border-radius;
-  padding: 28px;
+  padding: 32px;
   box-shadow: @shadow-sm;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
-  
+  transition: all 0.4s @ease-smooth;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.6s @ease-out-back backwards;
+
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+  &:nth-child(4) { animation-delay: 0.4s; }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0.5;
+  }
+
   &:hover {
+    transform: translateY(-4px);
     box-shadow: @shadow-md;
+    border-color: rgba(255, 255, 255, 0.15);
   }
 }
 
 .stepHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .stepNumber {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: @gradient-primary;
-  color: white;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: @text-secondary;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(245, 110, 3, 0.3);
+  transition: all 0.5s @ease-out-back;
 }
 
 .stepTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: @text-primary;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
 }
 
 .stepCompleted {
   .stepNumber {
-    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: @gradient-primary;
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 0 15px rgba(255, 80, 0, 0.4);
+    transform: scale(1.1);
+  }
+  
+  .stepTitle {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 }
 
 .capture {
   position: relative;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: @shadow-md;
+  border: 1px solid @card-border;
 
   .capture-bg {
     position: relative;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 252px;
     background-size: contain;
-    border-radius: 8px;
-
+    border-radius: 12px;
+    
     img {
       position: absolute;
       top: 0;
@@ -85,60 +112,129 @@
 }
 
 .divider {
-  width: 2px;
-  height: 100px;
-  background: linear-gradient(180deg, transparent 0%, rgba(245, 110, 3, 0.3) 50%, transparent 100%);
-  border-radius: 1px;
+  width: 1px;
+  height: auto;
+  min-height: 150px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  margin: 0 20px;
 }
 
 .response {
-  font-size: 12px;
+  font-size: 13px;
   word-break: break-all;
-  max-width: calc(100vw - 100px);
+  max-width: 100%;
   overflow: auto;
-  background: #1e1e3f;
+  background: rgba(0, 0, 0, 0.3);
   color: #a9b1d6;
-  padding: 20px;
-  border-radius: 10px;
-  font-family: 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   line-height: 1.6;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .loginSection {
   display: flex;
-  gap: 40px;
-  align-items: flex-start;
+  gap: 24px;
+  align-items: stretch;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .loginCard {
-  background: @gradient-login-card;
-  border-radius: 10px;
-  padding: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  min-width: 280px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex: 1;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .loginCardTitle {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: @text-primary;
-  margin-bottom: 16px;
+  color: @text-secondary;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
   &::before {
     content: '';
-    width: 4px;
+    width: 3px;
     height: 16px;
     background: @gradient-primary;
     border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 80, 0, 0.5);
   }
 }
 
 .buttonGroup {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
+}
+
+/* Input Styles Overlay */
+:global {
+  .ant-input {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    backdrop-filter: blur(10px);
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    &:hover, &:focus {
+      border-color: @primary !important;
+      box-shadow: 0 0 0 2px rgba(255, 80, 0, 0.2) !important;
+    }
+  }
+
+  .ant-input-affix-wrapper {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    
+    input {
+      background: transparent !important;
+      color: #fff !important;
+    }
+
+    &:hover, &:focus, &-focused {
+      border-color: @primary !important;
+      box-shadow: 0 0 0 2px rgba(255, 80, 0, 0.2) !important;
+    }
+  }
+
+  .ant-btn-primary {
+    background: @gradient-primary;
+    border: none;
+    box-shadow: 0 4px 14px rgba(255, 80, 0, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      background: linear-gradient(135deg, lighten(@primary, 5%) 0%, lighten(#ff8c33, 5%) 100%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 80, 0, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &[disabled] {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.3);
+    }
+  }
 }

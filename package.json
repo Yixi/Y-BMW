@@ -15,7 +15,7 @@
   },
   "lint-staged": {
     "./src/**/*.{js,jsx,ts,tsx,json,md}": [
-      "yarn lint --fix",
+      "pnpm lint --fix",
       "git add"
     ]
   },
