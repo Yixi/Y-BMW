@@ -4,6 +4,10 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,20 +30,20 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Login to Docker
-        uses: docker/login-action@v2
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PWD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         id: docker_push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+          tags: ghcr.io/yixi/y-bmw-frontend:${{ github.sha }}
   deploy:
     needs: build
     environment:
@@ -54,8 +58,15 @@ jobs:
           port: 22
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+          envs: IMAGE,SHA,GHCR_USER,GHCR_TOKEN
           script: |
-            cd $HOME
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            docker pull "$IMAGE:$SHA"
             docker stop bmw-frontend || true
             docker rm -f bmw-frontend || true
-            docker container run -d --name bmw-frontend --restart=always -p 8800:80 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+            docker container run -d --name bmw-frontend --restart=always -p 8800:80 "$IMAGE:$SHA"
+        env:
+          IMAGE: ghcr.io/yixi/y-bmw-frontend
+          SHA: ${{ github.sha }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
